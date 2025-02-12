@@ -18,7 +18,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
         cookieExtractor,
       ]),
       ignoreExpiration: process.env.NODE_ENV === 'dev',
-      secretOrKey: JWT_SECRET,
+      secretOrKey: JWT_SECRET ?? process.env.JWT_SIGNATURE,
     });
   }
 

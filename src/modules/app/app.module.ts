@@ -12,6 +12,7 @@ import { AppService } from './app.service';
 import { AppController } from './app.controller';
 import { LoggerMiddleware } from '../../middlewares/logger.middleware';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
+import { APP_GUARD } from '@nestjs/core';
 
 @Module({
   imports: [
@@ -21,31 +22,10 @@ import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
     UserModule,
     PostModule,
     ConfigModule.forRoot({ isGlobal: true, load: [() => GLOBAL_CONFIG] }),
-    ThrottlerModule.forRoot([
-      {
-        name: 'short',
-        ttl: 1000,
-        limit: 10,
-      },
-      {
-        name: 'medium',
-        ttl: 10000,
-        limit: 15,
-      },
-      {
-        name: 'long',
-        ttl: 60000,
-        limit: 30,
-      },
-      {
-        name: 'very-long',
-        ttl: 1800000,
-        limit: 200,
-      },
-    ]),
+    ThrottlerModule.forRoot([{ ttl: 1000, limit: 10 }]),
   ],
   controllers: [AppController],
-  providers: [AppService, { provide: 'APP_GUARD', useClass: ThrottlerGuard }],
+  providers: [AppService, { provide: APP_GUARD, useClass: ThrottlerGuard }],
   exports: [],
 })
 export class AppModule {

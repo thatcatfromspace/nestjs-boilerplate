@@ -1,104 +1,79 @@
-<p>
-  <a href="https://7code.ro/" target="blank"><img src="https://avatars.githubusercontent.com/u/41831998" height="100" alt="7Code Logo" /></a>
-</p>
 
-## Description
+# Customizing the Boilerplate for Specific Use Cases
 
-[Nest](https://github.com/nestjs/nest) + [Prisma](https://github.com/prisma/prisma) + [TypeScript](https://github.com/microsoft/TypeScript) starter repository.
+This guide provides step-by-step instructions on how to customize the provided NestJS + Prisma + TypeScript starter repository to suit your specific application needs. Whether you are building a simple blog, a complex e-commerce platform, or a scalable enterprise application, the following steps will help you tailor the boilerplate to your project.
 
-### Production-ready REST API:
-* Error Handling (Exception Filters)
-* Logging System
-* DB Seeds/Migrations
-* Built-in AuthModule, using JWT. Route Guards
-* Model Events Listener (onCreated, …)
-* Deployable. CI/CD pipeline using Github Actions.
-* Advanced ESLint/TSLint config. (e.g: auto-fix will remove unused imports)
-* Shared services/constants/helpers
-* Middlewares/Interceptors implementation example.
+## Step 1: Setup and Installation
 
-## TO-DO
-* Add Mail Service 
-* Add [Recap.DEV](https://recap.dev/) integration - Tracing/Monitoring service
-* Add Unit tests.
-* Add Social Media Auth
-* Add documentation for setting the GitHub Secrets for the CI/CD pipeline
-* Add API Throttling - https://docs.nestjs.com/security/rate-limiting
-* ...
-
-## Installation
-
-```bash
-$ npm install
+1. Clone the repository to your local machine.
+2. Install the necessary dependencies:
+```shell 
+  npm install 
 ```
 
-## Running the app
+3. Set up environment variables:
+    - Duplicate the `.env.example` file and rename it to `.env`.
+    - Populate the `.env` file with your specific configuration values such as database URLs, API keys, and secret keys.
 
-```bash
-# development
-$ npm run start
+## Step 2: Configure Database
 
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
-
+1. Modify the Prisma schema file located in `prisma/schema.prisma` to define your application's data models and relationships.
+2. Run the following command to apply migrations to your database:
+```shell
+  npx prisma generate
+  npx prisma migrate dev
 ```
 
-## Test
-
-```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
-```
-
-## Prisma (ORM)
-```bash
-# IDE for your database
-$ npx prisma studio 
-
-# run migrations (apply schema changes)
-$ npx prisma migrate dev
-
-# run migrations on CI/CD
-$ npx prisma migrate deploy
-
-# apply db schema changes to the prisma client
-$ npx prisma generate
+3. Open Prisma Studio to visually interact with your data:
+```shell
+  npx prisma studio
 ```
 
 
-## Auth
+
+## Step 3: Customize Modules
+
+1. Adjust or add new modules according to your application requirements. Each feature of your application should ideally be encapsulated in its own module.
+2. For each module, you can define:
+    - **Controllers**: Handle HTTP requests and responses.
+    - **Services**: Contain business logic.
+    - **Models/Entities**: Represent data and handle ORM with Prisma.
+
+## Step 4: Authentication and Authorization
+
 This implementation uses `httpOnly` (server-side) cookie-based authentication. [Read more](https://dev.to/guillerbr/authentication-cookies-http-http-only-jwt-reactjs-context-api-and-node-on-backend-industry-structure-3f8e)
 
-That means that the `JWT Token` is never stored on the client. 
-Usually it was stored in `localStorage` / `sesionStorage` / `cookies` (browser), but this is not secure. 
+That means that the `JWT Token` is never stored on the client.
+Usually it was stored in `localStorage` / `sesionStorage` / `cookies` (browser), but this is not secure.
 
 Storing the token on a server side cookie is more secure, but it requires a small adjustment on frontend HTTP requests in order to work.
 
-Frontend adjustments
+Frontend adjustments: 
 * If you're using `axios` then you need to set: `withCredentials: true`. [Read more](https://flaviocopes.com/axios-credentials/)
 * If you're using `fetch` then you need to set: `credentials: 'include'`. [Read more](https://github.com/github/fetch#sending-cookies)
 
+## Step 5: API Customization
 
-## Code Style
-Sync your IDE with project eslintrc.js. 
+1. Define new routes or modify existing ones in the controller files of respective modules.
+2. Customize request handling and response formats to meet the API specifications of your frontend application or external APIs.
 
-Check `Run ESLint --fix on save`
+## Step 6: Logging and Error Handling
 
-## Stay in touch
+1. Modify or extend exception filters to handle different types of exceptions according to your needs.
 
-- Author - [Igor Mardari](https://www.linkedin.com/in/igor-mardari-7code/) | [GarryOne](https://github.com/GarryOne)
-- Website - [7code.ro](https://7code.ro/)
-- Github - [@7codeRO](https://github.com/7codeRO/)
+## Step 7: Testing
 
-## License
+1. Write unit and e2e tests for new modules and functionalities.
+    - Use Jest and Supertest frameworks as they are already configured in the project.
+2. Ensure all tests pass before moving to production:
 
-  [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+```shell
+  npm run test
+  npm run test:e2e
+```
+
+
+## Step 8: Deployment
+
+1. Configure the CI/CD pipeline using GitHub Actions as per the provided `.github/workflows` directory.
+2. Adjust the pipeline settings for deployment to your chosen hosting service or server environments.

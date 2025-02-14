@@ -2,7 +2,7 @@ import { User } from '@prisma/client';
 import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
-import { INVALID_EMAIL } from '../../shared/constants/strings';
+import { INVALID_EMAIL } from '../../../shared/constants/strings';
 
 export class AuthResponseDTO {
   user: User;

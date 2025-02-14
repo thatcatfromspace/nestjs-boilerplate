@@ -5,7 +5,7 @@ import { User } from '@prisma/client';
 import { JWT_EXPIRY_SECONDS } from '../../shared/constants/global.constants';
 
 import { AuthService } from './auth.service';
-import { AuthResponseDTO, LoginUserDTO, RegisterUserDTO } from './auth.dto';
+import { AuthResponseDTO, LoginUserDTO, RegisterUserDTO } from './dto/auth.dto';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -18,9 +18,9 @@ export class AuthController {
   @ApiResponse({ type: AuthResponseDTO })
   async login(
     @Body() user: LoginUserDTO,
-    @Response() res,
+    @Response() res: any,
   ): Promise<AuthResponseDTO> {
-    const loginData = await this.authService.login(user);
+    const loginData: AuthResponseDTO = await this.authService.login(user);
 
     res.cookie('accessToken', loginData.accessToken, {
       expires: new Date(new Date().getTime() + JWT_EXPIRY_SECONDS * 1000),
@@ -38,7 +38,7 @@ export class AuthController {
   }
 
   @Post('logout')
-  logout(@Response() res): void {
+  logout(@Response() res: any): void {
     res.clearCookie('accessToken');
     res.status(200).send({ success: true });
   }

@@ -3,17 +3,15 @@ import { JwtService } from '@nestjs/jwt';
 import { User } from '@prisma/client';
 
 import { UserService } from '../user/user.service';
-import { PrismaService } from '../prisma/prisma.service';
 import { AuthHelpers } from '../../shared/helpers/auth.helpers';
 import { GLOBAL_CONFIG } from '../../configs/global.config';
 
-import { AuthResponseDTO, LoginUserDTO, RegisterUserDTO } from './auth.dto';
+import { AuthResponseDTO, LoginUserDTO, RegisterUserDTO } from './dto/auth.dto';
 
 @Injectable()
 export class AuthService {
   constructor(
     private userService: UserService,
-    private prisma: PrismaService,
     private jwtService: JwtService,
   ) {}
 
@@ -43,7 +41,7 @@ export class AuthService {
       // role: userData.role,
     };
 
-    const accessToken = this.jwtService.sign(payload, {
+    const accessToken: string = this.jwtService.sign(payload, {
       expiresIn: GLOBAL_CONFIG.security.expiresIn,
     });
 

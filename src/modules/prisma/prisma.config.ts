@@ -15,12 +15,11 @@ export const PRISMA_LOG_CONFIG: Array<LogDefinition> = [
 
 export const PRISMA_CLIENT_OPTIONS: PrismaClientOptions = {
   log: PRISMA_LOG_CONFIG,
-  rejectOnNotFound: true,
   // __internal: {
   //  hooks: {
-      // beforeRequest: (params) => {
-      //   // Do something
-      // },
-   // },
+  // beforeRequest: (params) => {
+  //   // Do something
+  // },
+  // },
   // },
 };

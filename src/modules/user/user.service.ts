@@ -2,6 +2,7 @@ import { Prisma, User } from '@prisma/client';
 import { Injectable } from '@nestjs/common';
 
 import { PrismaService } from '../prisma/prisma.service';
+import { AuthHelpers } from '../../shared/helpers/auth.helpers';
 
 @Injectable()
 export class UserService {
@@ -33,6 +34,8 @@ export class UserService {
   }
 
   async createUser(data: Prisma.UserCreateInput): Promise<User> {
+    const hashedPassword = await AuthHelpers.hash(data.password);
+    data.password = hashedPassword;
     return this.prisma.user.create({
       data,
     });
@@ -42,10 +45,15 @@ export class UserService {
     where: Prisma.UserWhereUniqueInput;
     data: Prisma.UserUpdateInput;
   }): Promise<User> {
-    const { where, data } = params;
+    if (params.data.password) {
+      const hashedPassword = await AuthHelpers.hash(
+        params.data.password as string,
+      );
+      params.data.password = hashedPassword;
+    }
     return this.prisma.user.update({
-      data,
-      where,
+      data: params.data,
+      where: params.where,
     });
   }
 

@@ -1,4 +1,5 @@
-import { Body, Controller, Post, Response } from '@nestjs/common';
+import { Body, Controller, Post, Res } from '@nestjs/common';
+import { Response as ExpressResponse } from 'express';
 import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { User } from '@prisma/client';
 
@@ -23,8 +24,8 @@ export class AuthController {
   @ApiResponse({ type: AuthResponseDTO })
   async login(
     @Body() user: LoginUserDTO,
-    @Response() res: any,
-  ): Promise<AuthResponseDTO> {
+    @Res() res: ExpressResponse,
+  ): Promise<void> {
     const loginData: AuthResponseDTO = await this.authService.login(user);
 
     res.cookie('accessToken', loginData.accessToken, {
@@ -34,7 +35,7 @@ export class AuthController {
       httpOnly: true,
     });
 
-    return res.status(200).send(loginData);
+    res.status(200).send(loginData);
   }
 
   @Post('register')
@@ -47,8 +48,8 @@ export class AuthController {
   @ApiResponse({ type: AuthResponseDTO })
   async refreshToken(
     @Body() refreshTokenDTO: RefreshUserDTO,
-    @Response() res: any,
-  ): Promise<AuthResponseDTO> {
+    @Res() res: ExpressResponse,
+  ): Promise<void> {
     const refreshData: AuthResponseDTO = await this.authService.refreshToken(
       refreshTokenDTO.refreshToken,
     );
@@ -60,10 +61,11 @@ export class AuthController {
       httpOnly: true,
     });
 
-    return res.status(200).send(refreshData);
+    res.status(200).send(refreshData);
   }
+
   @Post('logout')
-  logout(@Response() res: any): void {
+  logout(@Res() res: ExpressResponse): void {
     res.clearCookie('accessToken');
     res.status(200).send({ success: true });
   }

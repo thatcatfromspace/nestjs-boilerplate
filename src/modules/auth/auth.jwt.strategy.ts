@@ -1,4 +1,5 @@
 import { ExtractJwt, Strategy } from 'passport-jwt';
+import { Request } from 'express';
 import { PassportStrategy } from '@nestjs/passport';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { User } from '@prisma/client';
@@ -6,7 +7,8 @@ import { User } from '@prisma/client';
 import { JWT_SECRET } from '../../shared/constants/global.constants';
 import { PrismaService } from '../prisma/prisma.service';
 
-const cookieExtractor = (req) => req?.cookies.accessToken;
+const cookieExtractor = (req: Request): string | null =>
+  (req.cookies?.accessToken as string) ?? null;
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {

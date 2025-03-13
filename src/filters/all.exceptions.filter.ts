@@ -37,13 +37,12 @@ export class AllExceptionsFilter implements ExceptionFilter {
       };
     } else if (typeof exception === 'object' && exception !== null) {
       const exceptionObj = exception as Record<string, any>;
-      logger.setContext(exceptionObj.name || 'UnknownException');
-      logger.error(exceptionObj.message || 'No message available');
+      logger.setContext((exceptionObj.name as string) || 'UnknownException');
+      logger.error((exceptionObj.message as string) || 'No message available');
       httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
       responseBody = {
         statusCode: httpStatus,
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-        message: exceptionObj.message || 'Internal server error',
+        message: (exceptionObj.message as string) || 'Internal server error',
       };
     } else {
       logger.setContext('UnknownException');
